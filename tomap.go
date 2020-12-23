@@ -13,24 +13,24 @@ func ToMap(s interface{}, tag string) map[string]interface{} {
 	for i := 0; i < v.NumField(); i++ {
 		tf := t.Field(i)
 
-		tn, to := tf.Name, tagOptions("")
+		key, opts := tf.Name, tagOptions("")
 		if tag != "" {
-			n, o := parseTag(tf.Tag.Get(tag))
-			if n == "-" {
+			tn, to := parseTag(tf.Tag.Get(tag))
+			if tn == "-" {
 				continue
 			}
-			if n != "" {
-				tn = n
+			if tn != "" {
+				key = tn
 			}
-			to = o
+			opts = to
 		}
 
 		vf := v.Field(i)
-		if to.Contains("omitempty") && isEmptyValue(vf) {
+		if opts.Contains("omitempty") && isEmptyValue(vf) {
 			continue
 		}
 
-		m[tn] = vf.Interface()
+		m[key] = vf.Interface()
 	}
 
 	return m
