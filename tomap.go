@@ -12,6 +12,10 @@ func ToMap(s interface{}, tag string) map[string]interface{} {
 
 	for i := 0; i < v.NumField(); i++ {
 		tf := t.Field(i)
+		// skip unexported fields
+		if tf.PkgPath != "" {
+			continue
+		}
 
 		key, opts := tf.Name, tagOptions("")
 		if tag != "" {

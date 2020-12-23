@@ -10,7 +10,13 @@ func FieldNames(s interface{}, tag string) []string {
 
 	names := make([]string, 0, n)
 	for i := 0; i < n; i++ {
-		name := t.Field(i).Name
+		f := t.Field(i)
+		// skip unexported fields
+		if f.PkgPath != "" {
+			continue
+		}
+
+		name := f.Name
 		if tag != "" {
 			tn, _ := parseTag(t.Field(i).Tag.Get(tag))
 			if tn == "-" {
