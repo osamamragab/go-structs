@@ -1,5 +1,7 @@
 package structs
 
+import "reflect"
+
 // ToMap converts a struct to a map.
 // tag is defined in struct's tags, used as map key if not empty
 // otherwise field name is used.
@@ -7,7 +9,14 @@ package structs
 func ToMap(s interface{}, tag string) map[string]interface{} {
 	m := make(map[string]interface{})
 
-	v := structValue(s)
+	v := reflect.ValueOf(s)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	if v.Kind() != reflect.Struct {
+		panic("structs.ToMap: given value must be a struct")
+	}
+
 	t := v.Type()
 
 	for i := 0; i < v.NumField(); i++ {

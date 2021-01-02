@@ -19,14 +19,3 @@ func isEmptyValue(v reflect.Value) bool {
 	}
 	return false
 }
-
-func structValue(s interface{}) reflect.Value {
-	v := reflect.ValueOf(s)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-	if v.Kind() != reflect.Struct {
-		panic("given value must be a struct")
-	}
-	return v
-}

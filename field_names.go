@@ -1,10 +1,19 @@
 package structs
 
+import "reflect"
+
 // FieldNames gets field names of tag in struct.
 // if tag is empty string (""), field name is used.
 // Panics if s is not a struct.
 func FieldNames(s interface{}, tag string) []string {
-	v := structValue(s)
+	v := reflect.ValueOf(s)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	if v.Kind() != reflect.Struct {
+		panic("structs.FieldNames: given value must be a struct")
+	}
+
 	t := v.Type()
 	n := v.NumField()
 
