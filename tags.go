@@ -5,7 +5,7 @@ import "strings"
 type tagOptions string
 
 func parseTag(tag string) (string, tagOptions) {
-	if idx := strings.Index(tag, ","); idx != -1 {
+	if idx := strings.IndexByte(tag, ','); idx != -1 {
 		return tag[:idx], tagOptions(tag[idx+1:])
 	}
 	return tag, tagOptions("")
